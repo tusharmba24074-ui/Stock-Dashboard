@@ -1,0 +1,6 @@
+import requests, pandas as pd, io
+url = "https://nsearchives.nseindia.com/content/equities/EQUITY_L.csv"
+df = pd.read_csv(io.StringIO(requests.get(url, headers={"User-Agent":"Mozilla/5.0"}).text))
+symbols = [s.strip() + ".NS" for s in df["SYMBOL"] if isinstance(s, str)]
+pd.DataFrame({"ticker": symbols}).to_csv("nse_tickers.csv", index=False)
+print("Created nse_tickers.csv with", len(symbols), "tickers.")
